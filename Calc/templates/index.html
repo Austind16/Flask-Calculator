@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator</title>
+
+<style>
+
+body{
+margin:0;
+background:#0d0b14;
+font-family:Poppins, sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+}
+
+.container{
+width:380px;
+padding:25px;
+background:rgba(30,0,40,0.6);
+border-radius:18px;
+box-shadow:0 0 25px #7000ff80;
+backdrop-filter:blur(10px);
+border:1px solid #9a3dff70;
+}
+
+h1{
+text-align:center;
+color:#d9b3ff;
+margin-bottom:15px;
+}
+
+.screen{
+width:100%;
+height:60px;
+background:#1a0f29;
+border:1px solid #8f3dff;
+border-radius:10px;
+margin-bottom:15px;
+font-size:22px;
+padding:10px;
+color:#e6d4ff;
+}
+
+.row{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-bottom:12px;
+}
+
+button{
+background:#2b0947;
+color:#e4c4ff;
+padding:15px;
+font-size:18px;
+border-radius:12px;
+border:none;
+cursor:pointer;
+}
+
+button:hover{
+background:#5e00b8;
+}
+
+.equal{
+background:#7d00ff;
+color:white;
+}
+
+.result-box{
+margin-top:15px;
+text-align:center;
+font-size:20px;
+color:#d6baff;
+}
+
+.history{
+margin-top:20px;
+max-height:150px;
+overflow-y:auto;
+background:#140c22;
+padding:10px;
+border-radius:10px;
+}
+
+.history h3{
+margin:0;
+font-size:16px;
+color:#cfa7ff;
+}
+
+.history ul{
+list-style:none;
+padding:0;
+margin-top:10px;
+}
+
+.history li{
+padding:5px;
+font-size:14px;
+border-bottom:1px solid #333;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Scientific Calculator</h1>
+
+<input id="display" class="screen" type="text"
+value="{{ input_value if input_value else '' }}"
+placeholder="0" readonly>
+
+<form method="POST" id="calcForm">
+
+<input type="hidden" id="num1" name="num1">
+<input type="hidden" id="num2" name="num2">
+<input type="hidden" id="operation" name="operation">
+
+<div class="row">
+<button type="button" onclick="press('7')">7</button>
+<button type="button" onclick="press('8')">8</button>
+<button type="button" onclick="press('9')">9</button>
+<button type="button" onclick="setOp('/')">÷</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="press('4')">4</button>
+<button type="button" onclick="press('5')">5</button>
+<button type="button" onclick="press('6')">6</button>
+<button type="button" onclick="setOp('*')">×</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="press('1')">1</button>
+<button type="button" onclick="press('2')">2</button>
+<button type="button" onclick="press('3')">3</button>
+<button type="button" onclick="setOp('-')">−</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="press('0')">0</button>
+<button type="button" onclick="press('.')">.</button>
+<button type="button" onclick="setOp('+')">+</button>
+<button type="submit" class="equal">=</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="setSingle('sin')">sin</button>
+<button type="button" onclick="setSingle('cos')">cos</button>
+<button type="button" onclick="setSingle('tan')">tan</button>
+<button type="button" onclick="setSingle('sqrt')">√</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="setSingle('log')">log</button>
+<button type="button" onclick="setSingle('exp')">exp</button>
+<button type="button" onclick="setOp('^')">xʸ</button>
+<button type="button" onclick="clearDisplay()">C</button>
+</div>
+
+</form>
+
+<div class="result-box">
+{% if input_value %}
+Result: {{ input_value }}
+{% endif %}
+</div>
+
+<div class="history">
+<h3>History</h3>
+<ul>
+{% for item in history %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+</div>
+
+</div>
+
+<script>
+
+let display = document.getElementById("display");
+let num1Field = document.getElementById("num1");
+let num2Field = document.getElementById("num2");
+let opField = document.getElementById("operation");
+
+let firstNumber="";
+let secondNumber="";
+let currentOperation="";
+let isSecond=false;
+
+function press(num){
+if(!isSecond){
+firstNumber+=num;
+display.value=firstNumber;
+}
+else{
+secondNumber+=num;
+display.value=firstNumber+" "+currentOperation+" "+secondNumber;
+}
+}
+
+function setOp(op){
+currentOperation=op;
+isSecond=true;
+display.value=firstNumber+" "+op;
+opField.value=op;
+}
+
+function setSingle(op){
+
+firstNumber=display.value;
+
+if(firstNumber==="") return;
+
+display.value=op+"("+firstNumber+")";
+
+num1Field.value=firstNumber;
+
+opField.value=op;
+
+document.getElementById("calcForm").submit();
+}
+
+function clearDisplay(){
+
+firstNumber="";
+secondNumber="";
+currentOperation="";
+isSecond=false;
+
+display.value="";
+
+num1Field.value="";
+num2Field.value="";
+opField.value="";
+}
+
+document.getElementById("calcForm").addEventListener("submit",function(){
+
+num1Field.value=firstNumber;
+
+num2Field.value=secondNumber;
+
+});
+
+document.addEventListener("keydown",function(e){
+
+let key=e.key;
+
+if(!isNaN(key)){ press(key); }
+
+if(key==="."){ press("."); }
+
+if(["+","-","*","/","^"].includes(key)){ setOp(key); }
+
+if(key==="s"){ setSingle("sin"); }
+
+if(key==="c"){ setSingle("cos"); }
+
+if(key==="t"){ setSingle("tan"); }
+
+if(key==="q"){ setSingle("sqrt"); }
+
+if(key==="l"){ setSingle("log"); }
+
+if(key==="e"){ setSingle("exp"); }
+
+if(key==="Enter"){
+e.preventDefault();
+document.getElementById("calcForm").requestSubmit();
+}
+
+if(key==="Escape"){ clearDisplay(); }
+
+if(key==="Backspace"){
+
+if(!isSecond){
+firstNumber=firstNumber.slice(0,-1);
+display.value=firstNumber;
+}
+else{
+secondNumber=secondNumber.slice(0,-1);
+display.value=firstNumber+" "+currentOperation+" "+secondNumber;
+}
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
