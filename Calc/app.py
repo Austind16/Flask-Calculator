@@ -27,22 +27,22 @@ def calculator():
                 num = float(num1)
 
                 if operation == "sin":
-                    result = math.sin(math.radians(num))
+                    result = round(math.sin(math.radians(num)), 4)
                     history.append(f"sin({num}) = {result}")
                 elif operation == "cos":
-                    result = math.cos(math.radians(num))
+                    result = round(math.cos(math.radians(num)), 4)  
                     history.append(f"cos({num}) = {result}")
                 elif operation == "tan":
-                    result = math.tan(math.radians(num))
+                    result = round(math.tan(math.radians(num)), 4)
                     history.append(f"tan({num}) = {result}")
                 elif operation == "sqrt":
-                    result = "Error: negative root" if num < 0 else math.sqrt(num)
+                    result = "Error: negative root" if num < 0 else round(math.sqrt(num), 4)
                     history.append(f"sqrt({num}) = {result}")
                 elif operation == "log":
-                    result = "Error: log undefined for ≤ 0" if num <= 0 else math.log10(num)
+                    result = "Error: log undefined for ≤ 0" if num <= 0 else round(math.log10(num), 4)
                     history.append(f"log({num}) = {result}")
                 elif operation == "exp":
-                    result = math.exp(num)
+                    result = round(math.exp(num), 4)
                     history.append(f"exp({num}) = {result}")
 
         # ------------------------------
@@ -65,14 +65,19 @@ def calculator():
                     result = num1 * num2
                     history.append(f"{num1} * {num2} = {result}")
                 elif operation in ["/", "div"]:
-                    result = "Error: cannot divide by 0" if num2 == 0 else num1 / num2
+                    result = "Error: cannot divide by 0" if num2 == 0 else round(num1 / num2, 4)
                     history.append(f"{num1} / {num2} = {result}")
                 elif operation in ["^", "pow"]:
-                    result = num1 ** num2
+                    result = round(num1 ** num2, 4)
                     history.append(f"{num1} ^ {num2} = {result}")
 
     return render_template("index.html", input_value=result, history=history)
 
+@app.route("/clear-history", methods=["POST"])
+def clear_history():
+    global history
+    history.clear()
+    return '', 204
 
 if __name__ == "__main__":
     app.run(debug=True)

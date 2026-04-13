@@ -80,6 +80,7 @@ color:#d6baff;
 }
 
 .history{
+    
 margin-top:20px;
 max-height:150px;
 overflow-y:auto;
@@ -169,15 +170,22 @@ placeholder="0" readonly>
 
 </form>
 
-<div class="result-box">
-{% if input_value %}
-Result: {{ input_value }}
-{% endif %}
-</div>
-
 <div class="history">
 <h3>History</h3>
-<ul>
+
+<button type="button" onclick="clearHistory()" style="
+margin-top:8px;
+padding:6px 10px;
+background:#ff4d6d;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+font-size:12px;">
+Clear History
+</button>
+
+<ul id="historyList">
 {% for item in history %}
 <li>{{ item }}</li>
 {% endfor %}
@@ -296,6 +304,16 @@ display.value=firstNumber+" "+currentOperation+" "+secondNumber;
 }
 
 });
+function clearHistory(){
+
+    let historyList = document.getElementById("historyList");
+    historyList.innerHTML = "";
+
+    fetch("/clear-history", {
+        method: "POST"
+    });
+
+}
 
 </script>
 
