@@ -26,6 +26,7 @@
     <div class="cell" onclick="makeMove(6)"></div>
     <div class="cell" onclick="makeMove(7)"></div>
     <div class="cell" onclick="makeMove(8)"></div>
+    <p id="aiStatus">AI Mode: OFF</p>
 </div>
 
 <h2 id="status"></h2>
@@ -60,7 +61,9 @@ function makeMove(index) {
     if (board[index] !== "" || checkDone()) return;
 
     board[index] = currentPlayer;
-    document.getElementsByClassName("cell")[index].innerText = currentPlayer;
+    let cell = document.getElementsByClassName("cell")[index];
+    cell.innerText = currentPlayer;
+    cell.classList.add(currentPlayer === "X" ? "x-mark" : "o-mark");
 
     clickSound.play();
 
@@ -84,12 +87,22 @@ function makeMove(index) {
 }
 
 function aiMove() {
-    let empty = [];
-    board.forEach((v, i) => { if (v === "") empty.push(i); });
+    let bestScore = -Infinity;
+    let bestMove = -1;
 
-    let move = empty[Math.floor(Math.random() * empty.length)];
+    board.forEach((val, i) => {
+        if (val === "") {
+            board[i] = "O";
+            let score = minimax(board, false);
+            board[i] = "";
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = i;
+            }
+        }
+    });
 
-    makeMove(move);
+    makeMove(bestMove);
 }
 
 function showResult(winner) {
@@ -118,13 +131,57 @@ function resetGame() {
     let cells = document.getElementsByClassName("cell");
     for (let c of cells) {
         c.innerText = "";
-        c.classList.remove("finished");
+        c.classList.remove("finished", "x-mark", "o-mark");
     }
+}
+
+function minimax(board, isMaximizing) {
+    let winner = checkWinnerJS(board);
+    if (winner === "O") return 10;
+    if (winner === "X") return -10;
+    if (!board.includes("")) return 0;
+
+    if (isMaximizing) {
+        let best = -Infinity;
+        board.forEach((val, i) => {
+            if (val === "") {
+                board[i] = "O";
+                best = Math.max(best, minimax(board, false));
+                board[i] = "";
+            }
+        });
+        return best;
+    } else {
+        let best = Infinity;
+        board.forEach((val, i) => {
+            if (val === "") {
+                board[i] = "X";
+                best = Math.min(best, minimax(board, true));
+                board[i] = "";
+            }
+        });
+        return best;
+    }
+}
+
+function checkWinnerJS(board) {
+    const wins = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+    ];
+    for (let [a,b,c] of wins) {
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            return board[a];
+        }
+    }
+    return null;
 }
 
 function toggleAI() {
     aiMode = !aiMode;
-    alert("AI Mode: " + (aiMode ? "ON" : "OFF"));
+    document.getElementById("aiStatus").innerText = "AI Mode: " + (aiMode ? "ON" : "OFF");
+    document.getElementById("aiStatus").style.color = aiMode ? "#bb86fc" : "white";
 }
 </script>
 

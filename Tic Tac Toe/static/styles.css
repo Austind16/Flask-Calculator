@@ -65,3 +65,17 @@ button {
 button:hover {
     background: #9a6ce3;
 }
+
+#aiStatus {
+    font-size: 18px;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.x-mark {
+    color: #4fc3f7;
+}
+
+.o-mark {
+    color: #f48fb1;
+}
