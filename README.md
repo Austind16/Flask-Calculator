@@ -45,7 +45,7 @@ A classic Tic Tac Toe game implemented using Flask.
 #### 🛠️ Tech Used:
 - Flask  
 - Python logic  
-- HTML/CSS  
+- HTML,CSS & JS  
 
 ---
 
@@ -69,7 +69,7 @@ A weather application that fetches real-time data using an API.
 
 - 💻 Python  
 - ⚙️ Flask  
-- 🎨 HTML & CSS  
+- 🎨 HTML,CSS & JS  
 - 🌐 REST APIs  
 
 ---
@@ -78,7 +78,7 @@ A weather application that fetches real-time data using an API.
 
 ```bash
 1️⃣ Clone the repository
-git clone https://github.com/YOUR_USERNAME/flask-projects.git
+git clone https://github.com/Austind16/flask-projects.git
 cd flask-projects
 2️⃣ Create virtual environment
 python -m venv venv
@@ -101,7 +101,7 @@ python app.py
 ---
 
 ### 🤝 Connect With Me
-- 💼 LinkedIn: (Add your link here)
+- 💼 LinkedIn: www.linkedin.com/in/austinn-dsouza
 - 📫 Open to collaboration and opportunities
   
 ---
