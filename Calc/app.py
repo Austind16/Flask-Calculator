@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request
+import os
+from flask import Flask, render_template, request, session
 import math
 
 app = Flask(__name__)
+app.secret_key = os.getenv("app.secret_key")
+
 history = []
 
 @app.route("/", methods=["GET", "POST"])
@@ -24,7 +27,10 @@ def calculator():
             if num1 == "":
                 result = "Please enter a number."
             else:
-                num = float(num1)
+                try:
+                    num = float(num1)
+                except:
+                    result = "Invalid input. Please enter a valid number."
 
                 if operation == "sin":
                     result = round(math.sin(math.radians(num)), 4)
@@ -52,8 +58,11 @@ def calculator():
             if num1 == "" or num2 == "":
                 result = "Please enter both numbers."
             else:
-                num1 = float(num1)
-                num2 = float(num2)
+                try:
+                    num1 = float(num1)
+                    num2 = float(num2)
+                except:
+                    result = "Invalid input. Please enter valid numbers."
 
                 if operation in ["+", "add"]:
                     result = num1 + num2
