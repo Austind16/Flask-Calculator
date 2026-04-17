@@ -76,19 +76,28 @@ A weather application that fetches real-time data using an API.
 
 ## 🚀 Getting Started
 
+### 1️⃣ Clone the repository
 ```bash
-1️⃣ Clone the repository
 git clone https://github.com/Austind16/flask-projects.git
 cd flask-projects
-2️⃣ Create virtual environment
+```
+### 2️⃣ Create virtual environment
+```bash
 python -m venv venv
-3️⃣ Activate environment
+```
+### 3️⃣ Activate environment
+```bash
 venv\Scripts\activate
-4️⃣ Install dependencies
+```
+### 4️⃣ Install dependencies
+```bash
 pip install -r requirements.txt
-5️⃣ Run the app
+```
+### 5️⃣ Run the app
+```bash
 python app.py
 ```
+
 ---
 
 ### 🔥 Future Improvements
