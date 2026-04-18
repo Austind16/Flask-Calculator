@@ -8,9 +8,6 @@ load_dotenv(dotenv_path="../../.env")
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
 
-app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
-
 @app.route("/", methods=["GET", "POST"])
 def calculator():
     if "history" not in session:
