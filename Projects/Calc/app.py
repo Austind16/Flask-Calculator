@@ -65,15 +65,34 @@ def calculator():
                 try:
                     # Replace ^ with ** for power operations
                     expression_eval = expression.replace("^", "**")
+                    allowed_names = {
+                        "sin": lambda x: math.sin(math.radians(x)),
+                        "cos": lambda x: math.cos(math.radians(x)),
+                        "tan": lambda x: math.tan(math.radians(x)),
+                        "sqrt": math.sqrt,
+                        "log": math.log10,
+                        "exp": math.exp,
+                        "pi": math.pi,
+                        "e": math.e
+                    }
                     # Safely evaluate with restricted namespace
-                    result = eval(expression_eval, {"__builtins__": {}}, {})
+                    result = eval(expression_eval, {"__builtins__": {}}, allowed_names)
                     result = round(result, 4) if isinstance(result, float) else result
                     session["history"].append(f"{expression} = {result}")
                 except ZeroDivisionError:
                     result = "Error: cannot divide by 0"
                     session["history"].append(f"{expression} = {result}")
+                except ValueError:
+                    result = "Math domain error"
+                    session["history"].append(f"{expression} = {result}")
+                except OverflowError:
+                    result = "Error: result too large to calculate"
+                    session["history"].append(f"{expression} = {result}")
+                except SyntaxError:
+                    result = "Incomplete or invalid expression"
+                    session["history"].append(f"{expression} = {result}")
                 except Exception as e:
-                    result = f"Error: {str(e)}"
+                    result = "Invalid expression"
                     session["history"].append(f"{expression} = {result}")
 
     return render_template("index.html", input_value=result, history=session.get("history", []))
