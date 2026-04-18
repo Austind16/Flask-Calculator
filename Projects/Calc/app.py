@@ -3,7 +3,10 @@ from flask import Flask, render_template, request, session
 from dotenv import load_dotenv
 import math
 
-load_dotenv()
+load_dotenv(dotenv_path="../../.env")
+
+app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
