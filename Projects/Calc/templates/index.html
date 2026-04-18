@@ -20,9 +20,10 @@ placeholder="0" readonly>
 
 <form method="POST" id="calcForm">
 
-<input type="hidden" id="num1" name="num1">
-<input type="hidden" id="num2" name="num2">
+<input type="hidden" id="expression" name="expression">
 <input type="hidden" id="operation" name="operation">
+<input type="hidden" id="operation_type" name="operation_type">
+<input type="hidden" id="num1" name="num1">
 
 <div class="row">
 <button type="button" onclick="press('7')">7</button>
@@ -92,128 +93,7 @@ Clear History
 
 </div>
 
-<script>
-
-let display = document.getElementById("display");
-let num1Field = document.getElementById("num1");
-let num2Field = document.getElementById("num2");
-let opField = document.getElementById("operation");
-
-let firstNumber="";
-let secondNumber="";
-let currentOperation="";
-let isSecond=false;
-
-function press(num){
-if(!isSecond){
-firstNumber+=num;
-display.value=firstNumber;
-}
-else{
-secondNumber+=num;
-display.value=firstNumber+" "+currentOperation+" "+secondNumber;
-}
-}
-
-function setOp(op){
-currentOperation=op;
-isSecond=true;
-display.value=firstNumber+" "+op;
-opField.value=op;
-}
-
-function setSingle(op){
-
-firstNumber=display.value;
-
-if(firstNumber==="") return;
-
-display.value=op+"("+firstNumber+")";
-
-num1Field.value=firstNumber;
-
-opField.value=op;
-
-document.getElementById("calcForm").submit();
-}
-
-function clearDisplay(){
-
-firstNumber="";
-secondNumber="";
-currentOperation="";
-isSecond=false;
-
-display.value="";
-
-num1Field.value="";
-num2Field.value="";
-opField.value="";
-}
-
-document.getElementById("calcForm").addEventListener("submit",function(){
-
-num1Field.value=firstNumber;
-
-num2Field.value=secondNumber;
-
-});
-
-document.addEventListener("keydown",function(e){
-
-let key=e.key;
-
-if(!isNaN(key)){ press(key); }
-
-if(key==="."){ press("."); }
-
-if(["+","-","*","/","^"].includes(key)){ setOp(key); }
-
-if(key==="s"){ setSingle("sin"); }
-
-if(key==="c"){ setSingle("cos"); }
-
-if(key==="t"){ setSingle("tan"); }
-
-if(key==="q"){ setSingle("sqrt"); }
-
-if(key==="l"){ setSingle("log"); }
-
-if(key==="e"){ setSingle("exp"); }
-
-if(key==="Enter"){
-e.preventDefault();
-document.getElementById("calcForm").requestSubmit();
-}
-
-if(key==="Escape"){ clearDisplay(); }
-
-if(key==="Backspace"){
-
-if(!isSecond){
-firstNumber=firstNumber.slice(0,-1);
-display.value=firstNumber;
-}
-else{
-secondNumber=secondNumber.slice(0,-1);
-display.value=firstNumber+" "+currentOperation+" "+secondNumber;
-}
-
-}
-
-});
-function clearHistory(){
-
-    let historyList = document.getElementById("historyList");
-    historyList.innerHTML = "";
-
-    fetch("/clear-history", {
-        method: "POST"
-    });
-
-}
-
-</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>

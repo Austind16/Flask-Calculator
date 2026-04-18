@@ -13,21 +13,17 @@ def calculator():
     if "history" not in session:
         session["history"] = []
     
+    session.permanent = True
     result = None
 
     if request.method == "POST":
-        operation = request.form.get("operation")
-
-        # Always read num1 and num2 from the HTML
-        num1 = request.form.get("num1", "").strip()
-        num2 = request.form.get("num2", "").strip()
-
-        # ------------------------------
-        # SINGLE NUMBER OPERATIONS
-        # ------------------------------
-        single_ops = ["sin", "cos", "tan", "sqrt", "log", "exp"]
-
-        if operation in single_ops:
+        operation_type = request.form.get("operation_type")  # "single", "expression", or "single_ops"
+        
+        # Handle single function operations (sin, cos, etc.)
+        if operation_type == "single_ops":
+            operation = request.form.get("operation")
+            num1 = request.form.get("num1", "").strip()
+            
             if num1 == "":
                 result = "Please enter a number."
             else:
@@ -58,35 +54,27 @@ def calculator():
                     except OverflowError:
                         result = "Error: result too large to calculate"
                         session["history"].append(f"exp({num}) = {result}")
-
-        # ------------------------------
-        # TWO-NUMBER OPERATIONS
-        # ------------------------------
-        else:
-            if num1 == "" or num2 == "":
-                result = "Please enter both numbers."
+        
+        # Handle expression evaluation (multiple operations)
+        elif operation_type == "expression":
+            expression = request.form.get("expression", "").strip()
+            
+            if expression == "":
+                result = "Please enter an expression."
             else:
                 try:
-                    num1 = float(num1)
-                    num2 = float(num2)
-                except:
-                    result = "Invalid input. Please enter valid numbers."
-
-                if operation in ["+", "add"]:
-                    result = num1 + num2
-                    session["history"].append(f"{num1} + {num2} = {result}")
-                elif operation in ["-", "sub"]:
-                    result = num1 - num2
-                    session["history"].append(f"{num1} - {num2} = {result}")
-                elif operation in ["*", "mul"]:
-                    result = num1 * num2
-                    session["history"].append(f"{num1} * {num2} = {result}")
-                elif operation in ["/", "div"]:
-                    result = "Error: cannot divide by 0" if num2 == 0 else round(num1 / num2, 4)
-                    session["history"].append(f"{num1} / {num2} = {result}")
-                elif operation in ["^", "pow"]:
-                    result = round(num1 ** num2, 4)
-                    session["history"].append(f"{num1} ^ {num2} = {result}")
+                    # Replace ^ with ** for power operations
+                    expression_eval = expression.replace("^", "**")
+                    # Safely evaluate with restricted namespace
+                    result = eval(expression_eval, {"__builtins__": {}}, {})
+                    result = round(result, 4) if isinstance(result, float) else result
+                    session["history"].append(f"{expression} = {result}")
+                except ZeroDivisionError:
+                    result = "Error: cannot divide by 0"
+                    session["history"].append(f"{expression} = {result}")
+                except Exception as e:
+                    result = f"Error: {str(e)}"
+                    session["history"].append(f"{expression} = {result}")
 
     return render_template("index.html", input_value=result, history=session.get("history", []))
 
