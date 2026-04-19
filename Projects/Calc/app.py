@@ -68,9 +68,18 @@ def calculator():
                 try:
                     # Replace ^ with ** for power operations
                     expression_eval = expression.replace("^", "**")
-                    # Insert * between number/close paren and pi (e.g., 2pi -> 2*pi, )pi -> )*pi)
+                    # Insert * for implicit multiplication (e.g., 2pi, 2sin(30), )(, )log(10)).
                     import re
-                    expression_eval = re.sub(r'(\d|\))\s*pi', r'\1*pi', expression_eval)
+                    expression_eval = re.sub(
+                        r'(\d|\))\s*(pi|e|sin|cos|tan|sqrt|log|exp|\()',
+                        r'\1*\2',
+                        expression_eval
+                    )
+                    # Auto-close missing right parentheses for incomplete function inputs.
+                    open_parens = expression_eval.count("(")
+                    close_parens = expression_eval.count(")")
+                    if open_parens > close_parens:
+                        expression_eval += ")" * (open_parens - close_parens)
                     allowed_names = {
                         "sin": lambda x: math.sin(math.radians(x)),
                         "cos": lambda x: math.cos(math.radians(x)),
