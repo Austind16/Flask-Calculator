@@ -1,120 +1,87 @@
-# 🚀 Flask Projects Collection
+# 🔬 Scientific Calculator (Flask)
 
-> A collection of my Flask-based projects showcasing backend development, problem-solving, and real-world application building.
-
----
-
-## 🧠 About This Repository
-
-This repository contains multiple projects built using **Flask**, focusing on:
-
-- Backend development fundamentals  
-- API integration  
-- Logic building & problem solving  
-- Real-world application structure  
+A modern web-based scientific calculator built using Python and Flask, featuring a clean UI and support for both basic and advanced mathematical operations.
 
 ---
 
-## 📂 Projects Included
+## 📌 About
 
-### 🧮 1. Calculator App
-A simple yet functional calculator built using Flask.
+This project is a full-stack web calculator designed to perform both basic arithmetic and scientific calculations.  
+It also includes a history feature to track previous computations.
 
-#### ✨ Features:
-- Perform basic arithmetic operations  
-- Clean and minimal UI  
-- Fast and responsive
-- History and clear history function
-
-#### 🛠️ Tech Used:
-- Flask  
-- HTML,CSS & JS  
+The goal of this project was to understand how frontend and backend interact while building a functional web application.
 
 ---
 
-### ❌⭕ 2. Tic Tac Toe Game
-A classic Tic Tac Toe game implemented using Flask.
+## ✨ Features
 
-#### ✨ Features:
-- Interactive gameplay  
-- Win/draw detection  
-- Simple UI logic handling
-- Sound features
-- Unbeatable AI
-
-#### 🛠️ Tech Used:
-- Flask  
-- Python logic  
-- HTML,CSS & JS  
-
----
-
-### 🌦️ 3. Weather App (In Progress 🚧)
-A weather application that fetches real-time data using an API.
-
-#### ✨ Planned Features:
-- Search weather by city  
-- Real-time temperature & conditions  
-- API integration  
-- Clean UI with dynamic updates  
-
-#### 🛠️ Tech Used:
-- Flask  
-- API integration  
-- HTML/CSS  
+- Basic operations: +, −, ×, ÷  
+- Scientific functions:
+  - sin, cos, tan  
+  - square root (√)  
+  - logarithm (log)  
+  - exponential (exp)  
+  - power (xʸ)  
+- Keyboard support  
+- Calculation history  
+- Clear display & clear history functionality  
+- Clean and responsive UI  
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Technologies Used
 
-- 💻 Python  
-- ⚙️ Flask  
-- 🎨 HTML,CSS & JS  
-- 🌐 REST APIs  
+- Python 🐍  
+- Flask 🌐  
+- HTML, CSS, JavaScript  
 
 ---
 
-## 🚀 Getting Started
+## 🚀 How to Run
 
-### 1️⃣ Clone the repository
+### 1️⃣Clone the repository:
 ```bash
-git clone https://github.com/Austind16/flask-projects.git
-cd flask-projects
+git clone https://github.com/your-username/calculator.git
 ```
-### 2️⃣ Create virtual environment
+### 2️⃣Navigate to the project folder:
 ```bash
-python -m venv venv
+cd calculator
 ```
-### 3️⃣ Activate environment
+### 3️⃣Install dependencies:
 ```bash
-venv\Scripts\activate
+pip install flask
 ```
-### 4️⃣ Install dependencies
-```bash
-pip install -r requirements.txt
-```
-### 5️⃣ Run the app
+### 4️⃣Run the application:
 ```bash
 python app.py
 ```
+### 5️⃣Open in browser:
+```bash
+http://127.0.0.1:5000/
+```
 
 ---
 
-### 🔥 Future Improvements
-
-- Add authentication system 🔐
-- Improve UI/UX 🎨
-- Deploy all projects 🌐
-- Convert into full-stack apps using React ⚛️
+### 🧠 Key Learnings
+- Handling user input using JavaScript
+- Connecting frontend with Flask backend
+- Implementing mathematical logic in Python
+- Managing application state and history
+- Building interactive UI components
 
 ---
 
-### 🤝 Connect With Me
-- 💼 LinkedIn: www.linkedin.com/in/austinn-dsouza
-- 📫 Open to collaboration and opportunities
-  
+### 📈 Future Improvements
+- Add memory functions (M+, M-, MR)
+- Improve UI/UX design
+- Add dark/light theme toggle
+- Store history persistently (database/local storage)
+- Add more advanced math functions
+
 ---
 
-Every project here represents a step forward in my journey to becoming a top software engineer 🚀
+### 📌 Note
 
-⭐ If you like this repo, don’t forget to star it!
+This project is part of my learning journey in web development and will continue to evolve with new features and improvements.
+
+⭐ Feel free to explore and use the project!
