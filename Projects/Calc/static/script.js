@@ -90,34 +90,23 @@ function setSingle(op) {
         return;
     }
 
-    // Arm the operation and show function symbol/notation
-    pendingSingleOp = op;
-    expression = "";
+    // Insert functions directly into expression to support nesting.
+    let fnMap = {
+        sin: "sin(",
+        cos: "cos(",
+        tan: "tan(",
+        sqrt: "sqrt(",
+        log: "log(",
+        exp: "exp("
+    };
+
+    let token = fnMap[op] || "";
+    if (token === "") return;
+
+    expression += token;
+    pendingSingleOp = null;
     singleOpHasClosingParen = false;
-    let symbol = "";
-    switch(op) {
-        case "sqrt":
-            symbol = "√";
-            break;
-        case "sin":
-            symbol = "sin(";
-            break;
-        case "cos":
-            symbol = "cos(";
-            break;
-        case "tan":
-            symbol = "tan(";
-            break;
-        case "log":
-            symbol = "log(";
-            break;
-        case "exp":
-            symbol = "e^";
-            break;
-        default:
-            symbol = "";
-    }
-    display.value = symbol;
+    display.value = expression;
 }
 
 
