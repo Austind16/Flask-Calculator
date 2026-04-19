@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Scientific Calculator</h1>
+
+<input id="display" class="screen" type="text"
+value="{{ input_value if input_value else '' }}"
+placeholder="0" readonly>
+
+<form method="POST" id="calcForm">
+
+<input type="hidden" id="expression" name="expression">
+<input type="hidden" id="operation" name="operation">
+<input type="hidden" id="operation_type" name="operation_type">
+<input type="hidden" id="num1" name="num1">
+
+<div class="row">
+<button type="button" onclick="press('7')">7</button>
+<button type="button" onclick="press('8')">8</button>
+<button type="button" onclick="press('9')">9</button>
+<button type="button" onclick="setOp('/')">÷</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="press('4')">4</button>
+<button type="button" onclick="press('5')">5</button>
+<button type="button" onclick="press('6')">6</button>
+<button type="button" onclick="setOp('*')">×</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="press('1')">1</button>
+<button type="button" onclick="press('2')">2</button>
+<button type="button" onclick="press('3')">3</button>
+<button type="button" onclick="setOp('-')">−</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="press('0')">0</button>
+<button type="button" onclick="press('.')">.</button>
+<button type="button" onclick="setOp('+')">+</button>
+<button type="submit" class="equal">=</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="setSingle('sin')">sin</button>
+<button type="button" onclick="setSingle('cos')">cos</button>
+<button type="button" onclick="setSingle('tan')">tan</button>
+<button type="button" onclick="setSingle('sqrt')">√</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="setSingle('log')">log</button>
+<button type="button" onclick="setSingle('exp')">exp</button>
+<button type="button" onclick="setOp('^')">xʸ</button>
+<button type="button" onclick="clearDisplay()">C</button>
+</div>
+
+<div class="row">
+<button type="button" onclick="setBracket('(')">(</button>
+<button type="button" onclick="setBracket(')')">)</button>
+<button type="button" onclick="setSingle('square')">x²</button>
+<button type="button" onclick="insertPi()">π</button>
+</div>
+
+</form>
+
+<div class="history">
+<h3>History</h3>
+
+<button type="button" onclick="clearHistory()" style="
+margin-top:8px;
+padding:6px 10px;
+background:#ff4d6d;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+font-size:12px;">
+Clear History
+</button>
+
+<ul id="historyList">
+{% for item in history|reverse %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+</div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
