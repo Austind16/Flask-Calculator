@@ -1,1 +1,1 @@
-web: gunicorn Projects.Calc.app:app
+web: gunicorn Calc.app:app
