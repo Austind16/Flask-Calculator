@@ -68,6 +68,9 @@ def calculator():
                 try:
                     # Replace ^ with ** for power operations
                     expression_eval = expression.replace("^", "**")
+                    # Insert * between number/close paren and pi (e.g., 2pi -> 2*pi, )pi -> )*pi)
+                    import re
+                    expression_eval = re.sub(r'(\d|\))\s*pi', r'\1*pi', expression_eval)
                     allowed_names = {
                         "sin": lambda x: math.sin(math.radians(x)),
                         "cos": lambda x: math.cos(math.radians(x)),

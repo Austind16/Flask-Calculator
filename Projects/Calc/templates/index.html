@@ -71,6 +71,7 @@ placeholder="0" readonly>
 <button type="button" onclick="setBracket('(')">(</button>
 <button type="button" onclick="setBracket(')')">)</button>
 <button type="button" onclick="setSingle('square')">x²</button>
+<button type="button" onclick="insertPi()">π</button>
 </div>
 
 </form>
@@ -91,7 +92,7 @@ Clear History
 </button>
 
 <ul id="historyList">
-{% for item in history %}
+{% for item in history|reverse %}
 <li>{{ item }}</li>
 {% endfor %}
 </ul>

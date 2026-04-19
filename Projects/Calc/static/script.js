@@ -1,3 +1,11 @@
+function insertPi() {
+    expression += "pi";
+    if (pendingSingleOp && pendingSingleOp !== "square") {
+        updateSingleOpDisplay();
+    } else {
+        display.value = expression;
+    }
+}
 let display = document.getElementById("display");
 let expressionField = document.getElementById("expression");
 let opField = document.getElementById("operation");
@@ -6,27 +14,45 @@ let opTypeField = document.getElementById("operation_type");
 let expression="";
 
 let pendingSingleOp = null;
+let singleOpHasClosingParen = false;
+
+function getSingleOpPrefix(op) {
+    let funcMap = {
+        sin: "sin(",
+        cos: "cos(",
+        tan: "tan(",
+        log: "log(",
+        sqrt: "√",
+        exp: "e^"
+    };
+    return funcMap[op] || "";
+}
+
+function updateSingleOpDisplay() {
+    let prefix = getSingleOpPrefix(pendingSingleOp);
+    if (prefix === "") {
+        display.value = expression;
+        return;
+    }
+
+    // For trig ops, allow optional closing parenthesis in display only.
+    if (["sin", "cos", "tan"].includes(pendingSingleOp)) {
+        display.value = prefix + expression + (singleOpHasClosingParen ? ")" : "");
+        return;
+    }
+
+    display.value = prefix + expression;
+}
 
 function press(num) {
     // If a single op is pending, collect number input for it
     if (pendingSingleOp && pendingSingleOp !== "square") {
-        // For single ops, keep the function name in the display
-        // and append the number inside the function notation
-        let funcMap = {
-            sin: "sin(",
-            cos: "cos(",
-            tan: "tan(",
-            log: "log(",
-            sqrt: "√",
-            exp: "e^"
-        };
         if (expression === "") {
             expression = num;
-            display.value = funcMap[pendingSingleOp] + num;
         } else {
             expression += num;
-            display.value = funcMap[pendingSingleOp] + expression;
         }
+        updateSingleOpDisplay();
     } else {
         expression += num;
         display.value = expression;
@@ -40,7 +66,14 @@ function setOp(op) {
 }
 
 function setBracket(bracket) {
-    if (pendingSingleOp) return;
+    if (pendingSingleOp && pendingSingleOp !== "square") {
+        // For trig single ops, allow an optional closing parenthesis.
+        if (bracket === ")" && ["sin", "cos", "tan"].includes(pendingSingleOp) && expression !== "") {
+            singleOpHasClosingParen = true;
+            updateSingleOpDisplay();
+        }
+        return;
+    }
     if (bracket === ")" && expression === "") return;
     expression += bracket;
     display.value = expression;
@@ -60,6 +93,7 @@ function setSingle(op) {
     // Arm the operation and show function symbol/notation
     pendingSingleOp = op;
     expression = "";
+    singleOpHasClosingParen = false;
     let symbol = "";
     switch(op) {
         case "sqrt":
@@ -94,6 +128,7 @@ function clearDisplay() {
     opField.value = "";
     opTypeField.value = "";
     pendingSingleOp = null;
+    singleOpHasClosingParen = false;
 }
 
 
@@ -109,6 +144,7 @@ document.getElementById("calcForm").addEventListener("submit", function (e) {
         opTypeField.value = "single_ops";
         document.getElementById("num1").value = num;
         pendingSingleOp = null;
+        singleOpHasClosingParen = false;
     } else if (pendingSingleOp === "square") {
         // For square, use the normal expression flow
         opTypeField.value = "expression";
@@ -136,6 +172,7 @@ document.addEventListener("keydown", function (e) {
     if (key === "q") { setSingle("sqrt"); }
     if (key === "l") { setSingle("log"); }
     if (key === "x" || key === "X") { setSingle("square"); }
+    if (key === "p" || key === "P") { insertPi(); }
 
 
     if (key === "e") { setSingle("exp"); }
@@ -151,7 +188,14 @@ document.addEventListener("keydown", function (e) {
 
     if (key === "Backspace") {
         expression = expression.slice(0, -1);
-        display.value = expression;
+        if (pendingSingleOp && pendingSingleOp !== "square") {
+            if (expression === "") {
+                singleOpHasClosingParen = false;
+            }
+            updateSingleOpDisplay();
+        } else {
+            display.value = expression;
+        }
     }
 
 });
