@@ -9,13 +9,24 @@ let pendingSingleOp = null;
 
 function press(num) {
     // If a single op is pending, collect number input for it
-    if (pendingSingleOp) {
-        if (display.value === "" || expression === "") {
+    if (pendingSingleOp && pendingSingleOp !== "square") {
+        // For single ops, keep the function name in the display
+        // and append the number inside the function notation
+        let funcMap = {
+            sin: "sin(",
+            cos: "cos(",
+            tan: "tan(",
+            log: "log(",
+            sqrt: "√",
+            exp: "e^"
+        };
+        if (expression === "") {
             expression = num;
+            display.value = funcMap[pendingSingleOp] + num;
         } else {
             expression += num;
+            display.value = funcMap[pendingSingleOp] + expression;
         }
-        display.value = expression;
     } else {
         expression += num;
         display.value = expression;
@@ -36,6 +47,16 @@ function setBracket(bracket) {
 }
 
 function setSingle(op) {
+    if (op === "square") {
+        if (expression === "") return;
+        if (!expression.endsWith("^2")) {
+            expression += "^2";
+        }
+        pendingSingleOp = null;
+        display.value = expression;
+        return;
+    }
+
     // Arm the operation and show function symbol/notation
     pendingSingleOp = op;
     expression = "";
@@ -77,9 +98,9 @@ function clearDisplay() {
 
 
 document.getElementById("calcForm").addEventListener("submit", function (e) {
-    if (pendingSingleOp) {
-        // If a single op is pending, submit as single op
-        let num = display.value.trim();
+    if (pendingSingleOp && pendingSingleOp !== "square") {
+        // For single op, send only the numeric part (expression)
+        let num = expression.trim();
         if (num === "") {
             e.preventDefault();
             return;
@@ -87,6 +108,11 @@ document.getElementById("calcForm").addEventListener("submit", function (e) {
         opField.value = pendingSingleOp;
         opTypeField.value = "single_ops";
         document.getElementById("num1").value = num;
+        pendingSingleOp = null;
+    } else if (pendingSingleOp === "square") {
+        // For square, use the normal expression flow
+        opTypeField.value = "expression";
+        expressionField.value = expression;
         pendingSingleOp = null;
     } else {
         opTypeField.value = "expression";
@@ -109,6 +135,7 @@ document.addEventListener("keydown", function (e) {
     if (key === "t") { setSingle("tan"); }
     if (key === "q") { setSingle("sqrt"); }
     if (key === "l") { setSingle("log"); }
+    if (key === "x" || key === "X") { setSingle("square"); }
 
 
     if (key === "e") { setSingle("exp"); }

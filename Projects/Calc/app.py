@@ -29,31 +29,34 @@ def calculator():
             else:
                 try:
                     num = float(num1)
-                except:
+                except ValueError:
                     result = "Invalid input. Please enter a valid number."
-
-                if operation == "sin":
-                    result = round(math.sin(math.radians(num)), 4)
-                    session["history"].append(f"sin({num}) = {result}")
-                elif operation == "cos":
-                    result = round(math.cos(math.radians(num)), 4)  
-                    session["history"].append(f"cos({num}) = {result}")
-                elif operation == "tan":
-                    result = round(math.tan(math.radians(num)), 4)
-                    session["history"].append(f"tan({num}) = {result}")
-                elif operation == "sqrt":
-                    result = "Error: negative root" if num < 0 else round(math.sqrt(num), 4)
-                    session["history"].append(f"sqrt({num}) = {result}")
-                elif operation == "log":
-                    result = "Error: log undefined for ≤ 0" if num <= 0 else round(math.log10(num), 4)
-                    session["history"].append(f"log({num}) = {result}")
-                elif operation == "exp":
-                    try:
-                        result = round(math.exp(num), 4)
-                        session["history"].append(f"exp({num}) = {result}")
-                    except OverflowError:
-                        result = "Error: result too large to calculate"
-                        session["history"].append(f"exp({num}) = {result}")
+                else:
+                    if operation == "sin":
+                        result = round(math.sin(math.radians(num)), 8)
+                        session["history"].append(f"sin({num}) = {result}")
+                    elif operation == "cos":
+                        result = round(math.cos(math.radians(num)), 8)  
+                        session["history"].append(f"cos({num}) = {result}")
+                    elif operation == "tan":
+                        result = round(math.tan(math.radians(num)), 8)
+                        session["history"].append(f"tan({num}) = {result}")
+                    elif operation == "sqrt":
+                        result = "Negative root invalid" if num < 0 else round(math.sqrt(num), 4)
+                        session["history"].append(f"sqrt({num}) = {result}")
+                    elif operation == "log":
+                        result = "Log undefined for less than or equal to 0" if num <= 0 else round(math.log10(num), 4)
+                        session["history"].append(f"log({num}) = {result}")
+                    elif operation == "exp":
+                        try:
+                            result = round(math.exp(num), 4)
+                            session["history"].append(f"exp({num}) = {result}")
+                        except OverflowError:
+                            result = "Result too large to calculate"
+                            session["history"].append(f"exp({num}) = {result}")
+                    elif operation == "square":
+                        result = round(num ** 2, 4)
+                        session["history"].append(f"square({num}) = {result}")
         
         # Handle expression evaluation (multiple operations)
         elif operation_type == "expression":
@@ -80,18 +83,18 @@ def calculator():
                     result = round(result, 4) if isinstance(result, float) else result
                     session["history"].append(f"{expression} = {result}")
                 except ZeroDivisionError:
-                    result = "Error: cannot divide by 0"
+                    result = "Cannot divide by 0"
                     session["history"].append(f"{expression} = {result}")
                 except ValueError:
                     result = "Math domain error"
                     session["history"].append(f"{expression} = {result}")
                 except OverflowError:
-                    result = "Error: result too large to calculate"
+                    result = "Result too large to calculate"
                     session["history"].append(f"{expression} = {result}")
                 except SyntaxError:
                     result = "Incomplete or invalid expression"
                     session["history"].append(f"{expression} = {result}")
-                except Exception as e:
+                except Exception:
                     result = "Invalid expression"
                     session["history"].append(f"{expression} = {result}")
 
