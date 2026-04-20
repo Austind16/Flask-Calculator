@@ -80,6 +80,11 @@ http://127.0.0.1:5000/
 
 ---
 
+🔗Connect with me - www.linkedin.com/in/austinn-dsouza
+🔴Live link - https://flask-projects-2e73.onrender.com
+
+---
+
 ### 📌 Note
 
 This project is part of my learning journey in web development and will continue to evolve with new features and improvements.
