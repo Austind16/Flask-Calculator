@@ -30,9 +30,9 @@ The goal of this project was to understand how frontend and backend interact whi
 ---
 
 ## Screenchots
-<img src = "screenshots/Screenshot_1.png" width = "700">
-<img src = "screenshots/Screenshot_2.png" width = "700">
-<img src = "screenshots/Screenshot_3.jpg" width = "700">
+<img src = "screenshots/Screenshot_1.png" width = "500">
+<img src = "screenshots/Screenshot_2.png" width = "500">
+<img src = "screenshots/Screenshot_3.jpg" width = "500">
 
 ---
 
