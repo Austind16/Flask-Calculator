@@ -1,18 +1,44 @@
 import os
+from uuid import uuid4
 from flask import Flask, render_template, request, session, redirect, url_for
 from dotenv import load_dotenv
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 import math
 
 load_dotenv(dotenv_path="../../.env")
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
+database_url = os.getenv("DATABASE_URL", "sqlite:///calculator.db")
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+
+class Calculation(db.Model):
+    __tablename__ = "calculations"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_uuid = db.Column(db.String(36), nullable=False, index=True)
+    history = db.Column(db.Text, nullable=False)
+
+
+def get_user_uuid():
+    if "user_uuid" not in session:
+        session["user_uuid"] = str(uuid4())
+    return session["user_uuid"]
+
+
+def save_history(entry):
+    db.session.add(Calculation(user_uuid=get_user_uuid(), history=entry))
+    db.session.commit()
 
 @app.route("/", methods=["GET", "POST"])
 def calculator():
-    if "history" not in session:
-        session["history"] = []
-    
     session.permanent = True
 
     if request.method == "POST":
@@ -34,29 +60,29 @@ def calculator():
                 else:
                     if operation == "sin":
                         result = round(math.sin(math.radians(num)), 8)
-                        session["history"].append(f"sin({num}) = {result}")
+                        save_history(f"sin({num}) = {result}")
                     elif operation == "cos":
                         result = round(math.cos(math.radians(num)), 8)  
-                        session["history"].append(f"cos({num}) = {result}")
+                        save_history(f"cos({num}) = {result}")
                     elif operation == "tan":
                         result = round(math.tan(math.radians(num)), 8)
-                        session["history"].append(f"tan({num}) = {result}")
+                        save_history(f"tan({num}) = {result}")
                     elif operation == "sqrt":
                         result = "Negative root invalid" if num < 0 else round(math.sqrt(num), 4)
-                        session["history"].append(f"sqrt({num}) = {result}")
+                        save_history(f"sqrt({num}) = {result}")
                     elif operation == "log":
                         result = "Log undefined for less than or equal to 0" if num <= 0 else round(math.log10(num), 4)
-                        session["history"].append(f"log({num}) = {result}")
+                        save_history(f"log({num}) = {result}")
                     elif operation == "exp":
                         try:
                             result = round(math.exp(num), 4)
-                            session["history"].append(f"exp({num}) = {result}")
+                            save_history(f"exp({num}) = {result}")
                         except OverflowError:
                             result = "Result too large to calculate"
-                            session["history"].append(f"exp({num}) = {result}")
+                            save_history(f"exp({num}) = {result}")
                     elif operation == "square":
                         result = round(num ** 2, 4)
-                        session["history"].append(f"square({num}) = {result}")
+                        save_history(f"square({num}) = {result}")
         
         # Handle expression evaluation (multiple operations)
         elif operation_type == "expression":
@@ -93,33 +119,37 @@ def calculator():
                     # Safely evaluate with restricted namespace
                     result = eval(expression_eval, {"__builtins__": {}}, allowed_names)
                     result = round(result, 4) if isinstance(result, float) else result
-                    session["history"].append(f"{expression} = {result}")
+                    save_history(f"{expression} = {result}")
                 except ZeroDivisionError:
                     result = "Cannot divide by 0"
-                    session["history"].append(f"{expression} = {result}")
+                    save_history(f"{expression} = {result}")
                 except ValueError:
                     result = "Math domain error"
-                    session["history"].append(f"{expression} = {result}")
+                    save_history(f"{expression} = {result}")
                 except OverflowError:
                     result = "Result too large to calculate"
-                    session["history"].append(f"{expression} = {result}")
+                    save_history(f"{expression} = {result}")
                 except SyntaxError:
                     result = "Incomplete or invalid expression"
-                    session["history"].append(f"{expression} = {result}")
+                    save_history(f"{expression} = {result}")
                 except Exception:
                     result = "Invalid expression"
-                    session["history"].append(f"{expression} = {result}")
+                    save_history(f"{expression} = {result}")
 
         session["last_result"] = result
         session.modified = True
         return redirect(url_for("calculator"))
 
     result = session.pop("last_result", None)
-    return render_template("index.html", input_value=result, history=session.get("history", []))
+    history = [calculation.history for calculation in Calculation.query.filter_by(
+        user_uuid=get_user_uuid()
+    ).order_by(Calculation.id.desc()).all()]
+    return render_template("index.html", input_value=result, history=history)
 
 @app.route("/clear-history", methods=["POST"])
 def clear_history():
-    session["history"] = []
+    Calculation.query.filter_by(user_uuid=get_user_uuid()).delete()
+    db.session.commit()
     return '', 204
 
 if __name__ == "__main__":

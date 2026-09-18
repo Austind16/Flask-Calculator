@@ -40,6 +40,7 @@ The goal of this project was to understand how frontend and backend interact whi
 
 - Python 🐍  
 - Flask 🌐  
+- PostgreSQL with SQLAlchemy 🗄️
 - HTML, CSS, JavaScript  
 
 ---
@@ -56,7 +57,7 @@ cd calculator
 ```
 ### 3️⃣Install dependencies:
 ```bash
-pip install flask
+pip install -r requirements.txt
 ```
 ### 4️⃣Run the application:
 ```bash

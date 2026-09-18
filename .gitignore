@@ -1,5 +1,38 @@
+# Environment and secrets
 .env
+.env.*
+!.env.example
+
+# Local environments and runtime data
+venv/
+.venv/
+env/
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Python generated files and caches
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs and local tooling files
+*.log
+.coverage
+htmlcov/
+*.tmp
+*.bak
+node_modules/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Private keys and certificates
+*.pem
+*.key
+*.crt

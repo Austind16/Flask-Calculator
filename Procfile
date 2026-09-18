@@ -1,1 +1,1 @@
-web: gunicorn Calc.app:app
+web: flask --app Calc.app db upgrade && gunicorn Calc.app:app
