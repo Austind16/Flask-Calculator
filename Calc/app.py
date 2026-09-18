@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 from dotenv import load_dotenv
 import math
 
@@ -14,9 +14,9 @@ def calculator():
         session["history"] = []
     
     session.permanent = True
-    result = None
 
     if request.method == "POST":
+        result = None
         operation_type = request.form.get("operation_type")  # "single", "expression", or "single_ops"
         
         # Handle single function operations (sin, cos, etc.)
@@ -110,6 +110,11 @@ def calculator():
                     result = "Invalid expression"
                     session["history"].append(f"{expression} = {result}")
 
+        session["last_result"] = result
+        session.modified = True
+        return redirect(url_for("calculator"))
+
+    result = session.pop("last_result", None)
     return render_template("index.html", input_value=result, history=session.get("history", []))
 
 @app.route("/clear-history", methods=["POST"])
