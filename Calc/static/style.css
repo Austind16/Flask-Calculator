@@ -330,3 +330,42 @@ button:active {
     text-align: center;
 }
 
+@media (max-height: 820px) and (min-width: 600px) {
+    body {
+        align-items: flex-start;
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+
+    .container {
+        padding: 22px;
+    }
+
+    .app-header {
+        margin-bottom: 14px;
+    }
+
+    .screen {
+        height: 62px;
+        margin-bottom: 14px;
+    }
+
+    .row {
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    button {
+        height: 44px;
+    }
+
+    .history {
+        margin-top: 14px;
+        padding: 12px 14px;
+    }
+
+    .history-list {
+        max-height: 112px;
+    }
+}
+
