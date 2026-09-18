@@ -79,15 +79,24 @@
 
     <div class="history">
         <div class="history-header">
-            <h3>History</h3>
-            <button type="button" class="btn-clear-history" onclick="clearHistory()">Clear</button>
+            <div class="history-title">
+                <h3>History</h3>
+                {% if history %}<span class="history-count">{{ history|length }}</span>{% endif %}
+            </div>
+            <button type="button" class="btn-clear-history" onclick="clearHistory()">Clear all</button>
         </div>
 
         <ul id="historyList" class="history-list">
             {% for item in history|reverse %}
-            <li>{{ item }}</li>
+            <li>
+                <span class="history-index">{{ loop.index }}</span>
+                <span class="history-entry">{{ item }}</span>
+            </li>
             {% endfor %}
         </ul>
+        {% if not history %}
+        <p class="history-empty">Your calculations will appear here.</p>
+        {% endif %}
     </div>
 
 </div>

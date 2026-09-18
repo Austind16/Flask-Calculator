@@ -12,6 +12,8 @@ load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
 database_url = os.getenv("DATABASE_URL")
+if os.getenv("RENDER") and not database_url:
+    raise RuntimeError("DATABASE_URL is required when running on Render")
 if not database_url:
     database_url = "sqlite:///calculator.db"
 if database_url.startswith("postgres://"):
