@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from uuid import uuid4
 from flask import Flask, render_template, request, session, redirect, url_for
 from dotenv import load_dotenv
@@ -6,11 +7,13 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 import math
 
-load_dotenv(dotenv_path="../../.env")
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
-database_url = os.getenv("DATABASE_URL", "sqlite:///calculator.db")
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    database_url = "sqlite:///calculator.db"
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
