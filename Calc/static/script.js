@@ -28,20 +28,37 @@ function getSingleOpPrefix(op) {
     return funcMap[op] || "";
 }
 
+function adjustFontSize() {
+    if (!display) return;
+    let len = display.value.length;
+    if (len > 25) {
+        display.style.fontSize = "1.0rem";
+    } else if (len > 18) {
+        display.style.fontSize = "1.25rem";
+    } else if (len > 12) {
+        display.style.fontSize = "1.45rem";
+    } else {
+        display.style.fontSize = "";
+    }
+}
+
 function updateSingleOpDisplay() {
     let prefix = getSingleOpPrefix(pendingSingleOp);
     if (prefix === "") {
         display.value = expression;
+        adjustFontSize();
         return;
     }
 
     // For trig ops, allow optional closing parenthesis in display only.
     if (["sin", "cos", "tan"].includes(pendingSingleOp)) {
         display.value = prefix + expression + (singleOpHasClosingParen ? ")" : "");
+        adjustFontSize();
         return;
     }
 
     display.value = prefix + expression;
+    adjustFontSize();
 }
 
 function press(num) {
@@ -56,6 +73,7 @@ function press(num) {
     } else {
         expression += num;
         display.value = expression;
+        adjustFontSize();
     }
 }
 
