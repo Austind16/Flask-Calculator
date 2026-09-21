@@ -208,8 +208,17 @@ document.addEventListener("keydown", function (e) {
 });
 function clearHistory(){
 
+    // Clear the list items
     let historyList = document.getElementById("historyList");
     historyList.innerHTML = "";
+
+    // Hide the count badge
+    let countBadge = document.getElementById("historyCount");
+    if (countBadge) countBadge.style.display = "none";
+
+    // Show the empty-state message
+    let emptyMsg = document.getElementById("historyEmpty");
+    if (emptyMsg) emptyMsg.style.display = "block";
 
     fetch("/clear-history", {
         method: "POST"

@@ -81,7 +81,7 @@
         <div class="history-header">
             <div class="history-title">
                 <h3>History</h3>
-                {% if history %}<span class="history-count">{{ history|length }}</span>{% endif %}
+                <span id="historyCount" class="history-count" style="display:{{ 'inline-block' if history else 'none' }}">{{ history|length }}</span>
             </div>
             <button type="button" class="btn-clear-history" onclick="clearHistory()">Clear all</button>
         </div>
@@ -94,9 +94,7 @@
             </li>
             {% endfor %}
         </ul>
-        {% if not history %}
-        <p class="history-empty">Your calculations will appear here.</p>
-        {% endif %}
+        <p id="historyEmpty" class="history-empty" style="display:{{ 'none' if history else 'block' }}">Your calculations will appear here.</p>
     </div>
 
 </div>
