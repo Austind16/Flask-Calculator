@@ -132,6 +132,10 @@ h1 {
     margin-bottom: 10px;
 }
 
+.control-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 button {
     font-family: 'Inter', sans-serif;
     background: var(--btn-num-bg);

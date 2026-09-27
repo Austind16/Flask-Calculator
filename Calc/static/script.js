@@ -83,6 +83,13 @@ function setOp(op) {
     display.value = expression;
 }
 
+function insertPercentage() {
+    if (expression === "" || /[%+\-*\/^]$/.test(expression)) return;
+    expression += "%";
+    display.value = expression;
+    adjustFontSize();
+}
+
 function setBracket(bracket) {
     if (pendingSingleOp && pendingSingleOp !== "square") {
         // For trig single ops, allow an optional closing parenthesis.
@@ -138,6 +145,19 @@ function clearDisplay() {
     singleOpHasClosingParen = false;
 }
 
+function backspace() {
+    expression = expression.slice(0, -1);
+    if (pendingSingleOp && pendingSingleOp !== "square") {
+        if (expression === "") {
+            singleOpHasClosingParen = false;
+        }
+        updateSingleOpDisplay();
+    } else {
+        display.value = expression;
+        adjustFontSize();
+    }
+}
+
 
 document.getElementById("calcForm").addEventListener("submit", function (e) {
     if (pendingSingleOp && pendingSingleOp !== "square") {
@@ -171,6 +191,7 @@ document.addEventListener("keydown", function (e) {
     if (key === ".") { press("."); }
     if (key === "(" || key === ")") { setBracket(key); }
     if (["+", "-", "*", "/", "^"].includes(key)) { setOp(key); }
+    if (key === "%") { insertPercentage(); }
 
     // Function keys: if pending, submit; else, arm
     if (key === "s") { setSingle("sin"); }
@@ -194,15 +215,7 @@ document.addEventListener("keydown", function (e) {
     if (key === "Escape") { clearDisplay(); }
 
     if (key === "Backspace") {
-        expression = expression.slice(0, -1);
-        if (pendingSingleOp && pendingSingleOp !== "square") {
-            if (expression === "") {
-                singleOpHasClosingParen = false;
-            }
-            updateSingleOpDisplay();
-        } else {
-            display.value = expression;
-        }
+        backspace();
     }
 
 });

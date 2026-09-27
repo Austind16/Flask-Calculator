@@ -65,7 +65,7 @@
             <button type="button" class="btn-fn" onclick="setSingle('log')">log</button>
             <button type="button" class="btn-fn" onclick="setSingle('exp')">exp</button>
             <button type="button" class="btn-fn" onclick="setOp('^')">xʸ</button>
-            <button type="button" class="btn-clear" onclick="clearDisplay()">C</button>
+            <button type="button" class="btn-op" onclick="insertPercentage()">%</button>
         </div>
 
         <div class="row">
@@ -73,6 +73,11 @@
             <button type="button" class="btn-fn" onclick="setBracket(')')">)</button>
             <button type="button" class="btn-fn" onclick="setSingle('square')">x²</button>
             <button type="button" class="btn-fn" onclick="insertPi()">π</button>
+        </div>
+
+        <div class="row control-row">
+            <button type="button" class="btn-op" onclick="backspace()" aria-label="Backspace">⌫</button>
+            <button type="button" class="btn-clear" onclick="clearDisplay()">C</button>
         </div>
 
     </form>

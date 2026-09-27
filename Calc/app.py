@@ -99,8 +99,14 @@ def calculator():
                 try:
                     # Replace ^ with ** for power operations
                     expression_eval = expression.replace("^", "**")
-                    # Insert * for implicit multiplication (e.g., 2pi, 2sin(30), )(, )log(10)).
                     import re
+                    # Convert postfix percentages before evaluating the expression.
+                    expression_eval = re.sub(
+                        r'(\d+(?:\.\d+)?)%',
+                        r'(\1 / 100)',
+                        expression_eval
+                    )
+                    # Insert * for implicit multiplication (e.g., 2pi, 2sin(30), )(, )log(10)).
                     expression_eval = re.sub(
                         r'(\d|\))\s*(pi|e|sin|cos|tan|sqrt|log|exp|\()',
                         r'\1*\2',
