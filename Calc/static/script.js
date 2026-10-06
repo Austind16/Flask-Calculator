@@ -221,6 +221,8 @@ document.addEventListener("keydown", function (e) {
 });
 function clearHistory(){
 
+    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+
     // Clear the list items
     let historyList = document.getElementById("historyList");
     historyList.innerHTML = "";
@@ -234,7 +236,16 @@ function clearHistory(){
     if (emptyMsg) emptyMsg.style.display = "block";
 
     fetch("/clear-history", {
-        method: "POST"
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken
+        }
+    }).then(function (response) {
+        if (!response.ok) {
+            throw new Error("Unable to clear history");
+        }
+    }).catch(function () {
+        window.location.reload();
     });
 
 }

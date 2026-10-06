@@ -21,6 +21,7 @@
 
     <form method="POST" id="calcForm">
 
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" id="expression" name="expression">
         <input type="hidden" id="operation" name="operation">
         <input type="hidden" id="operation_type" name="operation_type">
@@ -108,4 +109,3 @@
 
 </body>
 </html>
-
