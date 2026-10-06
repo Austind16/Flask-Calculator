@@ -195,6 +195,15 @@ def save_history(entry):
         raise HistoryPersistenceError from exc
 
 
+def record_history(entry):
+    try:
+        save_history(entry)
+    except HistoryPersistenceError:
+        app.logger.exception("Unable to persist calculation history")
+        return False
+    return True
+
+
 def _parse_number(value):
     if not isinstance(value, str):
         raise ValueError("Number must be text")
@@ -248,9 +257,7 @@ def calculator():
                             result = round(num ** 2, 4)
                     except OverflowError:
                         result = "Result too large to calculate"
-                    try:
-                        save_history(f"{operation}({num}) = {result}")
-                    except HistoryPersistenceError:
+                    if not record_history(f"{operation}({num}) = {result}"):
                         result = "Calculation completed, but history could not be saved."
         
         # Handle expression evaluation (multiple operations)
@@ -263,24 +270,23 @@ def calculator():
                 try:
                     result = _safe_expression_result(expression)
                     result = round(result, 4) if isinstance(result, float) else result
-                    save_history(f"{expression} = {result}")
-                except HistoryPersistenceError:
-                    result = "Calculation completed, but history could not be saved."
+                    if not record_history(f"{expression} = {result}"):
+                        result = "Calculation completed, but history could not be saved."
                 except UnsafeExpressionError:
                     result = "Invalid expression"
-                    save_history(f"{expression} = {result}")
+                    record_history(f"{expression} = {result}")
                 except ZeroDivisionError:
                     result = "Cannot divide by 0"
-                    save_history(f"{expression} = {result}")
+                    record_history(f"{expression} = {result}")
                 except ValueError:
                     result = "Math domain error"
-                    save_history(f"{expression} = {result}")
+                    record_history(f"{expression} = {result}")
                 except OverflowError:
                     result = "Result too large to calculate"
-                    save_history(f"{expression} = {result}")
+                    record_history(f"{expression} = {result}")
                 except SyntaxError:
                     result = "Incomplete or invalid expression"
-                    save_history(f"{expression} = {result}")
+                    record_history(f"{expression} = {result}")
         else:
             result = "Invalid operation type."
 
@@ -293,6 +299,14 @@ def calculator():
         user_uuid=get_user_uuid()
     ).order_by(Calculation.id.desc()).all()]
     return render_template("index.html", input_value=result, history=history)
+
+
+@app.errorhandler(SQLAlchemyError)
+def handle_database_error(error):
+    db.session.rollback()
+    app.logger.exception("Database request failed", exc_info=error)
+    return {"error": "Database temporarily unavailable"}, 503
+
 
 @app.get("/health")
 @limiter.exempt

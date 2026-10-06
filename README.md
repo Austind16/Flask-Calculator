@@ -47,26 +47,46 @@ The goal of this project was to understand how frontend and backend interact whi
 
 ## 🚀 How to Run
 
-### 1️⃣Clone the repository:
+### 1️⃣ Clone the repository:
 ```bash
 git clone https://github.com/your-username/calculator.git
 ```
-### 2️⃣Navigate to the project folder:
+### 2️⃣ Navigate to the project folder:
 ```bash
-cd calculator
+cd Flask_Calcu
 ```
-### 3️⃣Install dependencies:
+### 3️⃣ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-### 4️⃣Run the application:
+### 4️⃣ Configure environment variables:
+
+Copy `.env.example` to `.env` and set a long random `SECRET_KEY`.
+Leave `DATABASE_URL` empty for local SQLite, or set it to a PostgreSQL URL
+for deployment.
+
+### 5️⃣ Apply database migrations:
+
 ```bash
-python app.py
+flask --app Calc.app db upgrade
 ```
-### 5️⃣Open in browser:
+
+Local SQLite data is stored at `instance/calculator.db`. Create schema changes
+with Flask-Migrate and commit the generated migration; do not edit the
+database file directly.
+
+### 6️⃣ Run the application:
+```bash
+flask --app Calc.app run
+```
+### 7️⃣ Open in browser:
 ```bash
 http://127.0.0.1:5000/
 ```
+
+The deployment command applies `db upgrade` before Gunicorn starts. The
+`/health` endpoint checks database connectivity and returns HTTP 200 only
+when the application can reach its database.
 
 ---
 
