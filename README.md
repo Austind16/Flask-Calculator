@@ -1,121 +1,111 @@
-# 🔬 Scientific Calculator (Flask)
+# CalcU
 
-A modern web-based scientific calculator built using Python and Flask, featuring a clean UI and support for both basic and advanced mathematical operations.
+CalcU is a personal/student Flask project: a web-based scientific calculator
+with keyboard input and saved calculation history.
 
----
+## Features
 
-## 📌 About
+- Basic arithmetic, percentages, powers, and parentheses
+- `sin`, `cos`, `tan`, square root, logarithm, exponential, and square
+- Degree-based trigonometric calculations
+- Keyboard input and backspace support
+- Session-based calculation history with a clear-history option
+- Responsive calculator interface
 
-This project is a full-stack web calculator designed to perform both basic arithmetic and scientific calculations.  
-It also includes a history feature to track previous computations.
+## Tech Stack
 
-The goal of this project was to understand how frontend and backend interact while building a functional web application.
+- Python
+- Flask
+- SQLAlchemy and Flask-Migrate
+- SQLite locally and PostgreSQL for deployment
+- HTML, CSS, and JavaScript
 
----
+## Project Structure
 
-## ✨ Features
-
-- Basic operations: +, −, ×, ÷  
-- Scientific functions:
-  - sin, cos, tan  
-  - square root (√)  
-  - logarithm (log)  
-  - exponential (exp)  
-  - power (xʸ)  
-- Keyboard support  
-- Calculation history  
-- Clear display & clear history functionality  
-- Clean and responsive UI  
-
----
-
-## 📸Screenshots
-<img src = "screenshots/Screenshot_1.png" width = "500">
-<img src = "screenshots/Screenshot_2.png" width = "500">
-<img src = "screenshots/Screenshot_3.jpg" width = "500">
-
----
-
-## 🛠️ Technologies Used
-
-- Python 🐍  
-- Flask 🌐  
-- PostgreSQL with SQLAlchemy 🗄️
-- HTML, CSS, JavaScript  
-
----
-
-## 🚀 How to Run
-
-### 1️⃣ Clone the repository:
-```bash
-git clone https://github.com/your-username/calculator.git
-```
-### 2️⃣ Navigate to the project folder:
-```bash
-cd Flask_Calcu
-```
-### 3️⃣ Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-### 4️⃣ Configure environment variables:
-
-Copy `.env.example` to `.env` and set a long random `SECRET_KEY`.
-Leave `DATABASE_URL` empty for local SQLite, or set it to a PostgreSQL URL
-for deployment.
-
-### 5️⃣ Apply database migrations:
-
-```bash
-flask --app Calc.app db upgrade
+```text
+Calc/
+├── app.py
+├── static/
+└── templates/
+migrations/
+tests/
+requirements.txt
+Procfile
 ```
 
-Local SQLite data is stored at `instance/calculator.db`. Create schema changes
-with Flask-Migrate and commit the generated migration; do not edit the
-database file directly.
+## Setup
 
-### 6️⃣ Run the application:
-```bash
-flask --app Calc.app run
+1. Clone the repository:
+
+   ```powershell
+   git clone https://github.com/Austind16/Flask_Projects.git
+   cd Flask_Projects
+   ```
+
+2. Create and activate a virtual environment:
+
+   ```powershell
+   py -3.14 -m venv venv
+   .\venv\Scripts\Activate.ps1
+   ```
+
+3. Install the requirements:
+
+   ```powershell
+   python -m pip install -r requirements.txt
+   ```
+
+4. Copy `.env.example` to `.env` and set `SECRET_KEY`. Leave `DATABASE_URL`
+   empty for local SQLite.
+
+5. Apply database migrations:
+
+   ```powershell
+   flask --app Calc.app db upgrade
+   ```
+
+6. Start Flask:
+
+   ```powershell
+   flask --app Calc.app run
+   ```
+
+7. Open [http://127.0.0.1:5000/](http://127.0.0.1:5000/).
+
+## Screenshots
+
+![Calculator](screenshots/Screenshot_1.png)
+
+![Calculator with history](screenshots/Screenshot_2.png)
+
+![Calculator result](screenshots/Screenshot_3.jpg)
+
+## Live Demo
+
+[CalcU on Render](https://flask-projects-2e73.onrender.com)
+
+## Testing
+
+The project uses Python's `unittest` test suite.
+
+```powershell
+python -m unittest discover -s tests -v
 ```
-### 7️⃣ Open in browser:
-```bash
-http://127.0.0.1:5000/
-```
 
-The deployment command applies `db upgrade` before Gunicorn starts. The
-`/health` endpoint checks database connectivity and returns HTTP 200 only
-when the application can reach its database.
+## What I Learned
 
----
+- Connecting a Flask frontend to backend calculation logic
+- Handling user input with JavaScript
+- Working with SQLAlchemy and database migrations
+- Building a responsive web interface
 
-### 🧠 Key Learnings
-- Handling user input using JavaScript
-- Connecting frontend with Flask backend
-- Implementing mathematical logic in Python
-- Managing application state and history
-- Building interactive UI components
+## Future Improvements
 
----
+- Add calculator memory functions
+- Add selectable angle modes
+- Improve calculation history management
 
-### 📈 Future Improvements
-- Add memory functions (M+, M-, MR)
-- Improve UI/UX design
-- Add dark/light theme toggle
-- Store history persistently (database/local storage)
-- Add more advanced math functions
+## Author
 
----
-
-🔗Connect with me - www.linkedin.com/in/austinn-dsouza
-
-🔴Live link - https://flask-projects-2e73.onrender.com
-
----
-
-### 📌 Note
-
-This project is part of my learning journey in web development and will continue to evolve with new features and improvements.
-
-⭐ Feel free to explore and use the project!
+Austin Dsouza
+[LinkedIn](https://www.linkedin.com/in/austinn-dsouza)
